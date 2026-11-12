@@ -293,3 +293,4 @@ export const UI_STRINGS: Record<LanguageCode, Record<string, string>> = {
     quickVoicePrompt: "Tap mic and speak...",
   }
 };
+

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mic, MicOff, PlusCircle, ArrowUpRight, ArrowDownRight, Target, Sparkles, TrendingUp, AlertTriangle } from 'lucide-react';
+import { Mic, MicOff, PlusCircle, ArrowUpRight, ArrowDownRight, TrendingUp, AlertTriangle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { ExpenseItem, SavingsGoal, LanguageCode, LiteracyLevel, UserProfile } from '../types';
 import { AudioButton } from './AudioButton';
@@ -17,13 +17,11 @@ interface BudgetingModuleProps {
 }
 
 export const BudgetingModule: React.FC<BudgetingModuleProps> = ({
-  profile,
   expenses,
   goals,
   onAddTransaction,
   onUpdateGoal,
   lang,
-  literacyLevel
 }) => {
   const [isListening, setIsListening] = useState(false);
   const [voiceText, setVoiceText] = useState('');
@@ -34,7 +32,7 @@ export const BudgetingModule: React.FC<BudgetingModuleProps> = ({
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
   const [type, setType] = useState<'income' | 'expense'>('income');
-  const [category, setCategory] = useState('dairy');
+  const [category] = useState('dairy');
 
   // Deposit to goal modal state
   const [selectedGoal, setSelectedGoal] = useState<SavingsGoal | null>(null);
@@ -78,9 +76,9 @@ export const BudgetingModule: React.FC<BudgetingModuleProps> = ({
             };
             onAddTransaction(newTx);
             speechService.playCoinSound();
-            setVoiceText(`सफलतापूर्वक जोड़ा: ${newTx.title} - ₹${newTx.amount}`);
+            setVoiceText(`सफलतापूर्वक दर्ज: ${newTx.title} - ₹${newTx.amount}`);
           } else {
-            setVoiceText(`सुना: "${transcript}". रकम समझ नहीं आई, कृपया स्पष्ट बोलें (उदा: 100 रुपये मिले)`);
+            setVoiceText(`सुना: "${transcript}". कृपया स्पष्ट बोलें (उदा: 100 रुपये मिले)`);
           }
           setIsListening(false);
         },
@@ -96,7 +94,6 @@ export const BudgetingModule: React.FC<BudgetingModuleProps> = ({
     }
   };
 
-  // Quick 1-tap presets for rural users
   const handleQuickAdd = (title: string, amount: number, type: 'income' | 'expense', cat: string, icon: string) => {
     const newTx: ExpenseItem = {
       id: 'tx-' + Date.now(),
@@ -131,92 +128,86 @@ export const BudgetingModule: React.FC<BudgetingModuleProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Overview Metric Cards */}
+      {/* Overview KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {/* Income */}
-        <div className="bg-white rounded-2xl p-4 sm:p-5 border-2 border-emerald-200 shadow-sm flex items-center justify-between">
-          <div>
-            <p className="text-xs font-bold text-emerald-800 uppercase tracking-wider flex items-center gap-1">
-              <ArrowUpRight className="w-4 h-4 text-emerald-600" />
-              <span>कुल आमदनी (Income)</span>
-            </p>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">
-              ₹{totalIncome.toLocaleString('en-IN')}
-            </h3>
-            <p className="text-xs text-slate-500 font-medium mt-0.5">डेयरी, सिलाई व कृषि कार्य से</p>
+        {/* Total Income */}
+        <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-soft">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              कुल आमदनी (Income)
+            </span>
+            <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+              <ArrowUpRight className="w-4 h-4" />
+            </div>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-2xl">
-            🌾
-          </div>
+          <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2 tracking-tight">
+            ₹{totalIncome.toLocaleString('en-IN')}
+          </h3>
+          <p className="text-xs text-slate-400 font-medium mt-1">डेयरी, सिलाई व कृषि उत्पाद</p>
         </div>
 
-        {/* Expense */}
-        <div className="bg-white rounded-2xl p-4 sm:p-5 border-2 border-rose-200 shadow-sm flex items-center justify-between">
-          <div>
-            <p className="text-xs font-bold text-rose-800 uppercase tracking-wider flex items-center gap-1">
-              <ArrowDownRight className="w-4 h-4 text-rose-600" />
-              <span>कुल खर्च (Expense)</span>
-            </p>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">
-              ₹{totalExpense.toLocaleString('en-IN')}
-            </h3>
-            <p className="text-xs text-slate-500 font-medium mt-0.5">राशन, दवा व घरेलू जरूरतें</p>
+        {/* Total Expense */}
+        <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-soft">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              कुल खर्च (Expense)
+            </span>
+            <div className="w-8 h-8 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center">
+              <ArrowDownRight className="w-4 h-4" />
+            </div>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-rose-100 flex items-center justify-center text-2xl">
-            🛒
-          </div>
+          <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2 tracking-tight">
+            ₹{totalExpense.toLocaleString('en-IN')}
+          </h3>
+          <p className="text-xs text-slate-400 font-medium mt-1">राशन, दवा व घरेलू जरूरतें</p>
         </div>
 
         {/* Net Savings */}
-        <div className="bg-gradient-to-br from-amber-400 to-saffron-500 text-white rounded-2xl p-4 sm:p-5 shadow-md flex items-center justify-between">
-          <div>
-            <p className="text-xs font-bold text-amber-100 uppercase tracking-wider flex items-center gap-1">
-              <TrendingUp className="w-4 h-4 text-amber-200" />
-              <span>हाथ में शुद्ध बचत (Savings)</span>
-            </p>
-            <h3 className="text-2xl sm:text-3xl font-black mt-1">
-              ₹{netSavings.toLocaleString('en-IN')}
-            </h3>
-            <div className="mt-1">
-              <AudioButton
-                textToSpeak={`आपकी कुल आमदनी ${totalIncome} रुपये और खर्च ${totalExpense} रुपये है। हाथ में बची शुद्ध बचत ${netSavings} रुपये है।`}
-                lang={lang}
-                size="sm"
-                className="bg-white/20 text-white border-white/30"
-              />
-            </div>
+        <div className="bg-slate-900 text-white rounded-2xl p-5 shadow-card border border-slate-800">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+              <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
+              हाथ में शुद्ध बचत (Savings)
+            </span>
+            <AudioButton
+              textToSpeak={`आपकी कुल आमदनी ${totalIncome} रुपये और खर्च ${totalExpense} रुपये है। हाथ में बची शुद्ध बचत ${netSavings} रुपये है।`}
+              lang={lang}
+              size="sm"
+              className="bg-white/10 hover:bg-white/20 text-white border-white/20"
+            />
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-2xl">
-            🏺
-          </div>
+          <h3 className="text-2xl sm:text-3xl font-extrabold text-emerald-400 mt-2 tracking-tight">
+            ₹{netSavings.toLocaleString('en-IN')}
+          </h3>
+          <p className="text-xs text-slate-400 font-medium mt-1">उपलब्ध अधिशेष राशि</p>
         </div>
       </div>
 
-      {/* Voice Entry Bar (Special AI Feature for low-literacy women) */}
-      <div className="bg-gradient-to-r from-amber-100 via-saffron-50 to-amber-100 rounded-3xl p-5 border-2 border-amber-300 shadow-sm">
+      {/* Voice Entry Bar (Refined & Minimalist) */}
+      <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-soft">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="flex items-center gap-3.5 w-full sm:w-auto">
             <button
               onClick={toggleListening}
-              className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all shadow-md active:scale-95 flex-shrink-0 touch-target-large ${
+              className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 shadow-sm active:scale-95 flex-shrink-0 ${
                 isListening
-                  ? 'bg-rose-600 text-white ring-8 ring-rose-200 animate-pulse'
-                  : 'bg-saffron-600 hover:bg-saffron-700 text-white'
+                  ? 'bg-rose-600 text-white ring-4 ring-rose-100 animate-pulse'
+                  : 'bg-slate-900 hover:bg-slate-800 text-white'
               }`}
               title="माइक दबाकर बोलें"
             >
-              {isListening ? <MicOff className="w-7 h-7" /> : <Mic className="w-7 h-7" />}
+              {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
             </button>
             <div>
-              <h3 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-                <span>बोलकर हिसाब लिखें (Voice Hisaab)</span>
+              <h3 className="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+                <span>बोलकर हिसाब लिखें (Voice Ledger)</span>
                 {isListening && (
-                  <span className="text-xs bg-rose-100 text-rose-700 font-bold px-2 py-0.5 rounded-full animate-bounce">
-                    सुन रहे हैं...
+                  <span className="text-[10px] bg-rose-50 text-rose-700 font-bold px-2 py-0.5 rounded-full border border-rose-200 animate-pulse">
+                    रिकॉर्डिंग जारी...
                   </span>
                 )}
               </h3>
-              <p className="text-xs sm:text-sm text-slate-600 font-medium">
+              <p className="text-xs text-slate-500 font-medium">
                 {voiceText || 'माइक दबाकर बोलें: "दूध के 80 रुपये मिले" या "सब्जी में 50 खर्च हुए"'}
               </p>
             </div>
@@ -224,60 +215,60 @@ export const BudgetingModule: React.FC<BudgetingModuleProps> = ({
 
           <button
             onClick={() => setShowAddForm(!showAddForm)}
-            className="w-full sm:w-auto px-4 py-2.5 bg-white hover:bg-amber-50 text-amber-900 border border-amber-300 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 shadow-sm"
+            className="w-full sm:w-auto px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
           >
-            <PlusCircle className="w-4 h-4 text-amber-600" />
-            <span>हाथ से दर्ज करें</span>
+            <PlusCircle className="w-3.5 h-3.5 text-slate-500" />
+            <span>मैनुअल जोड़ें</span>
           </button>
         </div>
 
-        {/* 1-Tap Quick Action Buttons (Visual First for Lakshmi) */}
-        <div className="mt-4 pt-3 border-t border-amber-200/80">
-          <p className="text-xs font-bold text-amber-900 mb-2 flex items-center gap-1">
-            <span>⚡ 1-क्लिक त्वरित जोड़ें (Quick Add):</span>
-          </p>
+        {/* 1-Tap Quick Action Buttons */}
+        <div className="mt-4 pt-3.5 border-t border-slate-100">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold text-slate-500">त्वरित प्रविष्टियां (1-Click Presets):</span>
+          </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             <button
               onClick={() => handleQuickAdd('दूध बिक्री आमदनी', 120, 'income', 'dairy', '🥛')}
-              className="p-2.5 bg-white hover:bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-2 text-left transition-all active:scale-95 shadow-xs"
+              className="p-2.5 bg-slate-50 hover:bg-emerald-50/60 border border-slate-200/80 hover:border-emerald-200 rounded-xl flex items-center gap-2 text-left transition-all active:scale-95"
             >
-              <span className="text-xl">🥛</span>
+              <span className="text-lg">🥛</span>
               <div>
-                <p className="text-xs font-bold text-emerald-900">+₹120 दूध मिला</p>
-                <p className="text-[10px] text-slate-500">डेयरी कमाई</p>
+                <p className="text-xs font-bold text-emerald-800">+₹120 दूध मिला</p>
+                <p className="text-[10px] text-slate-400">डेयरी कमाई</p>
               </div>
             </button>
 
             <button
               onClick={() => handleQuickAdd('सिलाई काम कमाई', 200, 'income', 'tailoring', '🧵')}
-              className="p-2.5 bg-white hover:bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-2 text-left transition-all active:scale-95 shadow-xs"
+              className="p-2.5 bg-slate-50 hover:bg-emerald-50/60 border border-slate-200/80 hover:border-emerald-200 rounded-xl flex items-center gap-2 text-left transition-all active:scale-95"
             >
-              <span className="text-xl">🧵</span>
+              <span className="text-lg">🧵</span>
               <div>
-                <p className="text-xs font-bold text-emerald-900">+₹200 सिलाई मिली</p>
-                <p className="text-[10px] text-slate-500">ब्लाउज/सूट</p>
+                <p className="text-xs font-bold text-emerald-800">+₹200 सिलाई मिली</p>
+                <p className="text-[10px] text-slate-400">ब्लाउज/सूट</p>
               </div>
             </button>
 
             <button
               onClick={() => handleQuickAdd('दैनिक राशन व सब्जी', 80, 'expense', 'grocery', '🌾')}
-              className="p-2.5 bg-white hover:bg-rose-50 border border-rose-200 rounded-xl flex items-center gap-2 text-left transition-all active:scale-95 shadow-xs"
+              className="p-2.5 bg-slate-50 hover:bg-rose-50/60 border border-slate-200/80 hover:border-rose-200 rounded-xl flex items-center gap-2 text-left transition-all active:scale-95"
             >
-              <span className="text-xl">🌾</span>
+              <span className="text-lg">🌾</span>
               <div>
-                <p className="text-xs font-bold text-rose-900">-₹80 राशन</p>
-                <p className="text-[10px] text-slate-500">हाट खर्च</p>
+                <p className="text-xs font-bold text-rose-800">-₹80 राशन</p>
+                <p className="text-[10px] text-slate-400">हाट खर्च</p>
               </div>
             </button>
 
             <button
-              onClick={() => handleQuickAdd('दवा व डॉक्टर परामर्श', 150, 'expense', 'health', '💊')}
-              className="p-2.5 bg-white hover:bg-rose-50 border border-rose-200 rounded-xl flex items-center gap-2 text-left transition-all active:scale-95 shadow-xs"
+              onClick={() => handleQuickAdd('दवा व परामर्श', 150, 'expense', 'health', '💊')}
+              className="p-2.5 bg-slate-50 hover:bg-rose-50/60 border border-slate-200/80 hover:border-rose-200 rounded-xl flex items-center gap-2 text-left transition-all active:scale-95"
             >
-              <span className="text-xl">💊</span>
+              <span className="text-lg">💊</span>
               <div>
-                <p className="text-xs font-bold text-rose-900">-₹150 दवा खर्च</p>
-                <p className="text-[10px] text-slate-500">स्वास्थ्य व्यय</p>
+                <p className="text-xs font-bold text-rose-800">-₹150 दवा खर्च</p>
+                <p className="text-[10px] text-slate-400">स्वास्थ्य व्यय</p>
               </div>
             </button>
           </div>
@@ -307,15 +298,15 @@ export const BudgetingModule: React.FC<BudgetingModuleProps> = ({
             setAmount('');
             setShowAddForm(false);
           }}
-          className="bg-white p-5 rounded-2xl border-2 border-slate-200 shadow-sm space-y-4"
+          className="bg-white p-5 rounded-2xl border border-slate-200 shadow-soft space-y-4"
         >
           <h4 className="text-sm font-bold text-slate-900">नया हिसाब दर्ज करें</h4>
           <div className="flex gap-2">
             <button
               type="button"
               onClick={() => setType('income')}
-              className={`flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold ${
-                type === 'income' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-700'
+              className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${
+                type === 'income' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-slate-100 text-slate-700'
               }`}
             >
               + आमदनी (कमाई)
@@ -323,8 +314,8 @@ export const BudgetingModule: React.FC<BudgetingModuleProps> = ({
             <button
               type="button"
               onClick={() => setType('expense')}
-              className={`flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold ${
-                type === 'expense' ? 'bg-rose-600 text-white' : 'bg-slate-100 text-slate-700'
+              className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${
+                type === 'expense' ? 'bg-rose-600 text-white shadow-xs' : 'bg-slate-100 text-slate-700'
               }`}
             >
               - खर्च (व्यय)
@@ -334,10 +325,10 @@ export const BudgetingModule: React.FC<BudgetingModuleProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <input
               type="text"
-              placeholder="विवरण (उदा. राशन, दूध, चूड़ी, खाद)"
+              placeholder="विवरण (उदा. राशन, दूध, सिलाई)"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="p-3 border border-slate-300 rounded-xl text-sm"
+              className="p-3 border border-slate-200 rounded-xl text-xs sm:text-sm focus:border-slate-400 focus:outline-none"
               required
             />
             <input
@@ -345,7 +336,7 @@ export const BudgetingModule: React.FC<BudgetingModuleProps> = ({
               placeholder="रकम (₹ Amount)"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="p-3 border border-slate-300 rounded-xl text-sm"
+              className="p-3 border border-slate-200 rounded-xl text-xs sm:text-sm focus:border-slate-400 focus:outline-none"
               required
             />
           </div>
@@ -354,13 +345,13 @@ export const BudgetingModule: React.FC<BudgetingModuleProps> = ({
             <button
               type="button"
               onClick={() => setShowAddForm(false)}
-              className="px-4 py-2 bg-slate-100 text-slate-600 rounded-xl text-xs font-bold"
+              className="px-4 py-2 bg-slate-100 text-slate-600 rounded-xl text-xs font-semibold"
             >
               रद्द करें
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold shadow"
+              className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-xs"
             >
               सहेजें
             </button>
@@ -369,13 +360,15 @@ export const BudgetingModule: React.FC<BudgetingModuleProps> = ({
       )}
 
       {/* Seasonal Rural Cashflow Alert */}
-      <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-xl flex items-start gap-3">
-        <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-        <div className="flex-1">
-          <p className="text-xs font-bold text-amber-900 uppercase">ऋतु चक्र व नकदी परामर्श (AI Forecast):</p>
-          <p className="text-xs sm:text-sm text-amber-950 font-medium leading-relaxed mt-0.5">
-            {seasonalAdvice}
-          </p>
+      <div className="bg-amber-50/70 border border-amber-200/80 p-4 rounded-2xl flex items-start justify-between gap-3">
+        <div className="flex items-start gap-3">
+          <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-xs font-bold text-amber-950 uppercase tracking-wider">ऋतु चक्र व नकदी परामर्श (AI Cashflow Forecast)</p>
+            <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed mt-0.5">
+              {seasonalAdvice}
+            </p>
+          </div>
         </div>
         <AudioButton
           textToSpeak={seasonalAdvice}
@@ -386,14 +379,14 @@ export const BudgetingModule: React.FC<BudgetingModuleProps> = ({
       </div>
 
       {/* Visual Smart Gullak (Goal-Based Savings) */}
-      <div className="bg-white rounded-3xl p-5 sm:p-7 border border-slate-200 shadow-sm">
-        <div className="flex items-center justify-between mb-4">
+      <div className="bg-white rounded-2xl p-6 border border-slate-200/90 shadow-soft">
+        <div className="flex items-center justify-between mb-5">
           <div>
-            <h3 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-              <span>🏺 सखी गुल्लक लक्ष्य (Visual Goals)</span>
+            <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
+              सखी गुल्लक लक्ष्य (Target Asset Savings)
             </h3>
             <p className="text-xs text-slate-500 font-medium">
-              मटके या अलमारी के बजाय हर लक्ष्य के लिए अलग गुल्लक बनाएं
+              मटके या अलमारी के बजाय हर लक्ष्य के लिए समर्पित बचत
             </p>
           </div>
           <AudioButton
@@ -409,55 +402,55 @@ export const BudgetingModule: React.FC<BudgetingModuleProps> = ({
             return (
               <div
                 key={goal.id}
-                className="bg-amber-50/40 rounded-2xl p-4 border border-amber-200 flex flex-col justify-between hover:border-amber-400 transition-all"
+                className="bg-slate-50/60 rounded-xl p-4 border border-slate-200/70 hover:border-slate-300 transition-all flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <div className="flex items-center gap-2.5">
-                      <span className="text-3xl p-2 bg-white rounded-xl shadow-xs border border-amber-100">
+                      <span className="text-2xl p-1.5 bg-white rounded-lg border border-slate-200/80 shadow-2xs">
                         {goal.icon}
                       </span>
                       <div>
-                        <h4 className="text-sm sm:text-base font-bold text-slate-900 leading-tight">
+                        <h4 className="text-sm font-bold text-slate-900 leading-tight">
                           {goal.title}
                         </h4>
-                        <p className="text-xs text-slate-500 font-medium">
+                        <p className="text-[11px] text-slate-400 font-medium">
                           लक्ष्य तिथि: {goal.targetDate}
                         </p>
                       </div>
                     </div>
-                    <span className="text-xs font-extrabold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">
+                    <span className="text-xs font-bold text-slate-700 bg-white border border-slate-200/80 px-2 py-0.5 rounded-md">
                       {percent}%
                     </span>
                   </div>
 
-                  {/* Progress bar */}
-                  <div className="w-full bg-slate-200 h-3 rounded-full overflow-hidden my-3">
+                  {/* Clean progress bar */}
+                  <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden my-3">
                     <div
-                      className="bg-gradient-to-r from-amber-500 to-saffron-600 h-full rounded-full transition-all duration-500"
+                      className="bg-emerald-600 h-full rounded-full transition-all duration-500"
                       style={{ width: `${percent}%` }}
                     ></div>
                   </div>
 
                   <div className="flex justify-between items-center text-xs font-semibold text-slate-700 mb-2">
                     <span>जमा: ₹{goal.currentAmount.toLocaleString('en-IN')}</span>
-                    <span>कुल लक्ष्य: ₹{goal.targetAmount.toLocaleString('en-IN')}</span>
+                    <span className="text-slate-400">लक्ष्य: ₹{goal.targetAmount.toLocaleString('en-IN')}</span>
                   </div>
 
-                  <p className="text-[11px] text-amber-900 font-medium bg-amber-100/60 px-2.5 py-1 rounded-lg">
+                  <p className="text-[11px] text-slate-600 font-medium bg-white p-2 rounded-lg border border-slate-200/60">
                     ✨ {goal.visualMilestone}
                   </p>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-amber-200/60 flex items-center justify-between">
+                <div className="mt-4 pt-3 border-t border-slate-200/60">
                   <button
                     onClick={() => {
                       setSelectedGoal(goal);
                       setDepositAmount('100');
                     }}
-                    className="w-full py-2 bg-amber-600 hover:bg-amber-700 active:scale-95 text-white rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 shadow-sm transition-all"
+                    className="w-full py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-2xs transition-all active:scale-95"
                   >
-                    <span>🪙 गुल्लक में ₹ जमा करें</span>
+                    🪙 गुल्लक में ₹ जमा करें
                   </button>
                 </div>
               </div>
@@ -466,32 +459,28 @@ export const BudgetingModule: React.FC<BudgetingModuleProps> = ({
         </div>
       </div>
 
-      {/* Transaction History (Visual Passbook Style) */}
-      <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
+      {/* Transaction History */}
+      <div className="bg-white rounded-2xl p-6 border border-slate-200/90 shadow-soft">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-base sm:text-lg font-bold text-slate-900">
-            हालिया लेनदेन (Passbook History)
+          <h3 className="text-base font-bold text-slate-900">
+            हालिया प्रविष्टियां (Ledger History)
           </h3>
-          <span className="text-xs text-slate-500 font-semibold">{expenses.length} प्रविष्टियां</span>
+          <span className="text-xs text-slate-400 font-medium">{expenses.length} प्रविष्टियां</span>
         </div>
 
-        <div className="space-y-2.5">
+        <div className="divide-y divide-slate-100">
           {expenses.map((tx) => (
             <div
               key={tx.id}
-              className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 hover:bg-amber-50/50 border border-slate-200/80 transition-all"
+              className="py-3 flex items-center justify-between hover:bg-slate-50/60 px-2 rounded-xl transition-colors"
             >
               <div className="flex items-center gap-3">
-                <div
-                  className={`w-11 h-11 rounded-2xl flex items-center justify-center text-xl ${
-                    tx.type === 'income' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
-                  }`}
-                >
+                <span className="text-xl p-2 bg-slate-100/80 rounded-xl">
                   {tx.icon}
-                </div>
+                </span>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900">{tx.title}</h4>
-                  <p className="text-xs text-slate-500 font-medium">
+                  <h4 className="text-xs sm:text-sm font-semibold text-slate-900">{tx.title}</h4>
+                  <p className="text-[11px] text-slate-400 font-medium">
                     {tx.date} {tx.note && `• ${tx.note}`}
                   </p>
                 </div>
@@ -499,8 +488,8 @@ export const BudgetingModule: React.FC<BudgetingModuleProps> = ({
 
               <div className="flex items-center gap-3">
                 <span
-                  className={`text-base font-extrabold ${
-                    tx.type === 'income' ? 'text-emerald-600' : 'text-rose-600'
+                  className={`text-sm font-bold ${
+                    tx.type === 'income' ? 'text-emerald-600' : 'text-slate-800'
                   }`}
                 >
                   {tx.type === 'income' ? '+' : '-'}₹{tx.amount}
@@ -518,25 +507,25 @@ export const BudgetingModule: React.FC<BudgetingModuleProps> = ({
 
       {/* Deposit to Goal Modal */}
       {selectedGoal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border-4 border-amber-300">
-            <h3 className="text-lg font-bold text-slate-900 mb-1 flex items-center gap-2">
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-elevated border border-slate-200 animate-in zoom-in-95">
+            <h3 className="text-base font-bold text-slate-900 mb-1 flex items-center gap-2">
               <span>{selectedGoal.icon}</span>
               <span>{selectedGoal.title}</span>
             </h3>
             <p className="text-xs text-slate-500 mb-4">
-              अपनी गुल्लक में आज कितनी बचत डालना चाहती हैं?
+              गुल्लक में कितनी बचत डालना चाहती हैं?
             </p>
 
-            <div className="grid grid-cols-3 gap-2 mb-4">
-              {['50', '100', '250', '500', '1000'].map((preset) => (
+            <div className="grid grid-cols-4 gap-2 mb-4">
+              {['50', '100', '250', '500'].map((preset) => (
                 <button
                   key={preset}
                   onClick={() => setDepositAmount(preset)}
-                  className={`py-2 rounded-xl text-xs font-bold border transition-all ${
+                  className={`py-2 rounded-xl text-xs font-semibold border transition-all ${
                     depositAmount === preset
-                      ? 'bg-amber-500 text-white border-amber-600'
-                      : 'bg-amber-50 text-amber-900 border-amber-200'
+                      ? 'bg-slate-900 text-white border-slate-900'
+                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                   }`}
                 >
                   +₹{preset}
@@ -548,20 +537,20 @@ export const BudgetingModule: React.FC<BudgetingModuleProps> = ({
               type="number"
               value={depositAmount}
               onChange={(e) => setDepositAmount(e.target.value)}
-              className="w-full p-3 border-2 border-amber-300 rounded-xl text-center text-xl font-bold mb-4"
-              placeholder="अन्य रकम दर्ज करें"
+              className="w-full p-3 border border-slate-300 rounded-xl text-center text-lg font-bold mb-4 focus:border-slate-500 focus:outline-none"
+              placeholder="रकम दर्ज करें"
             />
 
             <div className="flex gap-2">
               <button
                 onClick={() => setSelectedGoal(null)}
-                className="flex-1 py-2.5 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold"
+                className="flex-1 py-2.5 bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold"
               >
                 रद्द करें
               </button>
               <button
                 onClick={handleDepositToGoal}
-                className="flex-1 py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold shadow"
+                className="flex-1 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-xs"
               >
                 गुल्लक में डालें 🪙
               </button>

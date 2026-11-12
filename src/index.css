@@ -4,49 +4,72 @@
 
 @layer base {
   body {
-    font-family: 'Poppins', 'Hind', system-ui, -apple-system, sans-serif;
-    color: #1e293b;
-    background-color: #fbf7ee;
+    font-family: 'Plus Jakarta Sans', 'Hind', system-ui, -apple-system, sans-serif;
+    color: #0f172a;
+    background-color: #fbfaf7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
   }
 }
 
 /* Custom sound wave animation */
 @keyframes soundwave {
-  0%, 100% { height: 6px; }
-  50% { height: 22px; }
+  0%, 100% { height: 4px; }
+  50% { height: 16px; }
 }
 
 .animate-wave-1 {
-  animation: soundwave 1s ease-in-out infinite;
+  animation: soundwave 0.8s ease-in-out infinite;
 }
 .animate-wave-2 {
-  animation: soundwave 1s ease-in-out infinite 0.2s;
+  animation: soundwave 0.8s ease-in-out infinite 0.15s;
 }
 .animate-wave-3 {
-  animation: soundwave 1s ease-in-out infinite 0.4s;
+  animation: soundwave 0.8s ease-in-out infinite 0.3s;
 }
 .animate-wave-4 {
-  animation: soundwave 1s ease-in-out infinite 0.6s;
+  animation: soundwave 0.8s ease-in-out infinite 0.45s;
 }
 
-/* Shimmer effect for gold & prosperity cards */
-@keyframes goldShimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+/* Clean glass cards */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
-.gold-gradient-card {
-  background: linear-gradient(135deg, #fff7d6 0%, #fedd88 50%, #fbd061 100%);
-  border: 1px solid #f59e0b;
+.gold-luxury-card {
+  background: linear-gradient(135deg, #fdfbf7 0%, #f7f1e3 60%, #eedfc0 100%);
+  border: 1px solid rgba(213, 187, 138, 0.5);
 }
 
-.peacock-gradient-card {
-  background: linear-gradient(135deg, #e6f9fa 0%, #b3e7ea 100%);
-  border: 1px solid #00838f;
+.emerald-luxury-card {
+  background: linear-gradient(135deg, #064e3b 0%, #065f46 60%, #047857 100%);
+  border: 1px solid rgba(134, 239, 172, 0.3);
 }
 
-/* Big touch target style for low-literacy users */
-.touch-target-large {
-  min-height: 54px;
+/* Minimalist scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.35);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.6);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

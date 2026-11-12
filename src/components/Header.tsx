@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, Globe, Eye, Volume2, ShieldCheck, UserCheck } from 'lucide-react';
+import { Sparkles, Globe, Eye, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { UserProfile, LanguageCode, LiteracyLevel } from '../types';
 import { LANGUAGES, UI_STRINGS } from '../services/translations';
 
@@ -26,80 +26,79 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-amber-200/80 shadow-sm">
-      {/* Top emergency & trust ribbon */}
-      <div className="bg-gradient-to-r from-saffron-600 via-amber-600 to-saffron-700 text-white px-3 py-1.5 text-xs sm:text-sm font-medium flex items-center justify-between">
-        <div className="flex items-center gap-1.5 overflow-hidden text-ellipsis whitespace-nowrap">
-          <ShieldCheck className="w-4 h-4 flex-shrink-0 text-amber-200" />
+    <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
+      {/* Minimalist trust & cyber security ribbon */}
+      <div className="bg-slate-900 text-slate-300 px-4 py-1.5 text-xs font-medium flex items-center justify-between border-b border-slate-800">
+        <div className="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap">
+          <ShieldCheck className="w-3.5 h-3.5 flex-shrink-0 text-emerald-400" />
           <span className="truncate">{strings.safetyAlert}</span>
         </div>
-        <div className="flex items-center gap-2 flex-shrink-0 pl-2">
-          <span className="bg-white/20 px-2 py-0.5 rounded text-xs">हेल्पलाइन: 1930</span>
+        <div className="flex items-center gap-3 flex-shrink-0 pl-3">
+          <span className="text-[11px] text-slate-400">राष्ट्रीय साइबर हेल्पलाइन: <strong className="text-white">1930</strong></span>
         </div>
       </div>
 
       {/* Main navigation header */}
-      <div className="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
-        {/* Brand & Persona Badge */}
+      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+        {/* Brand & Persona Profile Badge */}
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-saffron-600 flex items-center justify-center text-2xl shadow-md border-2 border-amber-200">
+          <div className="w-11 h-11 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-center justify-center text-2xl shadow-2xs">
             {profile.avatar}
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-1.5">
+              <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
                 {strings.appTitle}
-                <span className="text-xs bg-saffron-100 text-saffron-800 font-semibold px-2 py-0.5 rounded-full border border-saffron-300">
-                  सखी 2.0
-                </span>
               </h1>
-            </div>
-            <p className="text-xs text-slate-500 font-medium flex items-center gap-1">
-              <span>{profile.name}</span>
-              <span>•</span>
-              <span>{profile.village}</span>
-              <span>•</span>
-              <span className="text-emerald-600 font-semibold flex items-center gap-0.5">
-                <UserCheck className="w-3 h-3" /> SHG सदस्या
+              <span className="text-[11px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-200/60 flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                SHG सत्यापित
               </span>
+            </div>
+            <p className="text-xs text-slate-500 font-medium flex items-center gap-1.5 mt-0.5">
+              <span>{profile.name}</span>
+              <span className="text-slate-300">•</span>
+              <span>{profile.village}</span>
+              <span className="text-slate-300">•</span>
+              <span className="text-slate-600">{profile.occupation}</span>
             </p>
           </div>
         </div>
 
         {/* Accessibility & Language Controls */}
-        <div className="flex items-center flex-wrap gap-2 sm:gap-3 ml-auto">
-          {/* Literacy Mode Selector */}
-          <div className="bg-amber-50 p-1 rounded-xl border border-amber-200 flex items-center gap-1 text-xs">
+        <div className="flex items-center flex-wrap gap-2 sm:gap-2.5 ml-auto">
+          {/* Literacy Mode Segmented Switcher */}
+          <div className="bg-slate-100/90 p-1 rounded-xl flex items-center gap-1 text-xs border border-slate-200/70">
             <button
               onClick={() => handleLiteracyChange('visual')}
-              className={`px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition-all font-medium ${
+              className={`px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition-all font-semibold ${
                 profile.literacyLevel === 'visual'
-                  ? 'bg-amber-500 text-white shadow-sm'
-                  : 'text-amber-900 hover:bg-amber-100'
+                  ? 'bg-white text-slate-900 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
-              title="चित्र व आवाज़ मोड (Non-reader mode)"
+              title="चित्र व आवाज़ मोड (Non-reader mode with visual guides)"
             >
-              <Eye className="w-3.5 h-3.5" />
+              <Eye className="w-3.5 h-3.5 text-amber-600" />
               <span className="hidden sm:inline">{strings.literacyVisual}</span>
               <span className="sm:hidden">चित्र</span>
             </button>
             <button
               onClick={() => handleLiteracyChange('simple')}
-              className={`px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition-all font-medium ${
+              className={`px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition-all font-semibold ${
                 profile.literacyLevel === 'simple'
-                  ? 'bg-amber-500 text-white shadow-sm'
-                  : 'text-amber-900 hover:bg-amber-100'
+                  ? 'bg-white text-slate-900 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
-              title="सरल पठन मोड (Short text)"
+              title="सरल पठन (Easy short text)"
             >
               <span>{strings.literacySimple}</span>
             </button>
             <button
               onClick={() => handleLiteracyChange('standard')}
-              className={`px-2 py-1.5 rounded-lg transition-all font-medium hidden md:inline-block ${
+              className={`px-2.5 py-1.5 rounded-lg transition-all font-semibold hidden md:inline-block ${
                 profile.literacyLevel === 'standard'
-                  ? 'bg-amber-500 text-white shadow-sm'
-                  : 'text-amber-900 hover:bg-amber-100'
+                  ? 'bg-white text-slate-900 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
               title="विस्तृत मोड (Detailed)"
             >
@@ -108,12 +107,12 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* Multilingual Selector */}
-          <div className="relative flex items-center bg-white rounded-xl border border-slate-300 px-2 py-1 shadow-sm">
-            <Globe className="w-4 h-4 text-slate-500 mr-1.5" />
+          <div className="relative flex items-center bg-white rounded-xl border border-slate-200 px-2.5 py-1.5 shadow-2xs hover:border-slate-300 transition-colors">
+            <Globe className="w-3.5 h-3.5 text-slate-400 mr-1.5" />
             <select
               value={currentLang}
               onChange={handleLanguageChange}
-              className="bg-transparent text-xs sm:text-sm font-semibold text-slate-800 focus:outline-none cursor-pointer pr-2"
+              className="bg-transparent text-xs font-semibold text-slate-800 focus:outline-none cursor-pointer pr-1"
               aria-label="भाषा चुनें"
             >
               {LANGUAGES.map(lang => (
@@ -127,9 +126,9 @@ export const Header: React.FC<HeaderProps> = ({
           {/* AI Voice Assistant Pill Button */}
           <button
             onClick={onOpenVoiceAssistant}
-            className="flex items-center gap-1.5 bg-gradient-to-r from-saffron-500 to-amber-500 hover:from-saffron-600 hover:to-amber-600 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-md hover:shadow-lg active:scale-95 transition-all touch-target-large"
+            className="flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-sm hover:shadow active:scale-95 transition-all"
           >
-            <Sparkles className="w-4 h-4 text-amber-200 animate-spin" style={{ animationDuration: '4s' }} />
+            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
             <span>{strings.askSaheli}</span>
           </button>
         </div>

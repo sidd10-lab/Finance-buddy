@@ -9,7 +9,7 @@ import { MicroInvestmentModule } from './components/MicroInvestmentModule';
 import { BankingModule } from './components/BankingModule';
 import { MentorshipModule } from './components/MentorshipModule';
 import { SaheliVoiceChatModal } from './components/SaheliVoiceChatModal';
-import { Mic, Sparkles, Heart } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { speechService } from './services/speechService';
 
 export const App: React.FC = () => {
@@ -60,7 +60,6 @@ export const App: React.FC = () => {
 
   const handleAddTransaction = (newTx: ExpenseItem) => {
     setExpenses(prev => [newTx, ...prev]);
-    // update wallet balance
     if (newTx.type === 'income') {
       setProfile(prev => ({ ...prev, walletBalance: prev.walletBalance + newTx.amount }));
     } else {
@@ -72,7 +71,6 @@ export const App: React.FC = () => {
     setGoals(prev =>
       prev.map(g => (g.id === goalId ? { ...g, currentAmount: g.currentAmount + addAmount } : g))
     );
-    // Deduct from wallet if desired or consider it saved
     setProfile(prev => ({
       ...prev,
       walletBalance: Math.max(0, prev.walletBalance - addAmount)
@@ -86,7 +84,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fbf7ee]">
+    <div className="min-h-screen flex flex-col bg-[#fbfaf7] text-slate-900">
       {/* Sticky App Header */}
       <Header
         profile={profile}
@@ -105,7 +103,7 @@ export const App: React.FC = () => {
       />
 
       {/* Content Container */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-3 sm:px-6 py-6 pb-24">
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 pb-24">
         {activeTab === 'education' && (
           <EducationModule
             lessons={lessons}
@@ -156,18 +154,17 @@ export const App: React.FC = () => {
       <aside aria-label="AI Voice Assistant Launcher" className="fixed bottom-6 right-6 z-40">
         <button
           onClick={() => setIsAiModalOpen(true)}
-          className="group relative flex items-center gap-2.5 bg-gradient-to-r from-saffron-500 via-amber-500 to-saffron-600 hover:from-saffron-600 hover:to-amber-600 text-white px-5 py-3.5 rounded-full shadow-2xl active:scale-95 transition-all duration-300 border-2 border-white/60 touch-target-large"
+          className="group relative flex items-center gap-2.5 bg-slate-900 hover:bg-slate-800 text-white px-4 py-3 rounded-full shadow-elevated active:scale-95 transition-all duration-200 border border-slate-700/80"
           title="सखी AI से बोलकर पूछें"
         >
-          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-lg animate-pulse">
+          <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-sm">
             🧕
           </div>
-          <span className="font-extrabold text-sm sm:text-base tracking-wide">
+          <span className="font-semibold text-xs sm:text-sm tracking-wide">
             सखी AI बोलें
           </span>
-          <span className="absolute -top-1 -right-1 flex h-4 w-4">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-300 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-4 w-4 bg-amber-400"></span>
+          <span className="flex items-center">
+            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
           </span>
         </button>
       </aside>
@@ -181,16 +178,15 @@ export const App: React.FC = () => {
       />
 
       {/* Footer */}
-      <footer className="bg-white border-t border-amber-200/60 py-6 text-center text-xs text-slate-500">
+      <footer className="bg-white border-t border-slate-200/80 py-6 text-center text-xs text-slate-400">
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-1.5 text-amber-900 font-bold">
-            <span>🪙 लक्ष्मी सखी (Lakshmi Sakhi)</span>
+          <div className="flex items-center gap-1.5 text-slate-700 font-semibold">
+            <span>लक्ष्मी सखी (Lakshmi Sakhi)</span>
             <span>•</span>
-            <span>आत्मनिर्भर ग्रामीण नारी सशक्तिकरण</span>
+            <span className="text-slate-500 font-normal">आत्मनिर्भर ग्रामीण नारी वित्तीय सशक्तिकरण</span>
           </div>
-          <div className="flex items-center gap-1 text-slate-400">
-            <span>ग्रामीण विकास मंत्रालय व महिला स्वयं सहायता समूह हेतु समर्पित</span>
-            <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 inline ml-1" />
+          <div className="text-slate-400">
+            ग्रामीण विकास मंत्रालय (NRLM) एवं स्वयं सहायता समूह (SHG) हेतु समर्पित
           </div>
         </div>
       </footer>

@@ -101,3 +101,4 @@ export interface CommunityPost {
   timestamp: string;
   category: 'success_story' | 'savings_tip' | 'question' | 'shg_update';
 }
+

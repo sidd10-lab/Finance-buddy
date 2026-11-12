@@ -398,3 +398,4 @@ export const communityPosts: CommunityPost[] = [
     category: "shg_update"
   }
 ];
+
