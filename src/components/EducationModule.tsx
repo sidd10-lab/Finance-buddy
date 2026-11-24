@@ -128,6 +128,70 @@ export const EducationModule: React.FC<EducationModuleProps> = ({
         ))}
       </div>
 
+      {/* Visual Learning Roadmap Graphic: Lakshmi Gyan Yatra */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900/90 via-[#0a1826]/90 to-slate-950 p-5 border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.4)] backdrop-blur-xl">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            <h3 className="text-xs font-bold text-white uppercase tracking-wider">
+              {lang === 'en' ? 'Financial Mastery Roadmap (Gyan Yatra)' : 'सखी वित्तीय ज्ञान यात्रा (Roadmap)'}
+            </h3>
+          </div>
+          <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-400/30 font-mono">
+            LEVEL 1 • SHG SAKHI
+          </span>
+        </div>
+
+        <div className="relative py-2">
+          {/* Connecting Track Line */}
+          <div className="absolute top-1/2 left-6 right-6 -translate-y-1/2 h-1 bg-white/10 rounded-full">
+            <div className="h-full bg-gradient-to-r from-emerald-500 via-teal-400 to-amber-400 rounded-full w-2/3 shadow-[0_0_12px_rgba(16,185,129,0.5)]" />
+          </div>
+
+          <div className="relative z-10 grid grid-cols-4 gap-2 text-center">
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 rounded-2xl bg-emerald-500 text-slate-950 font-black flex items-center justify-center text-sm shadow-[0_0_15px_rgba(16,185,129,0.5)] border-2 border-emerald-300">
+                ✓
+              </div>
+              <span className="text-[11px] font-bold text-white mt-2 leading-tight">
+                {lang === 'en' ? 'Basic Banking' : 'बुनियादी खाता'}
+              </span>
+              <span className="text-[9px] text-emerald-400 font-semibold">{lang === 'en' ? 'Completed' : 'सत्यापित'}</span>
+            </div>
+
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-400 text-slate-950 font-black flex items-center justify-center text-sm shadow-[0_0_15px_rgba(245,158,11,0.5)] border-2 border-amber-300 animate-pulse">
+                2
+              </div>
+              <span className="text-[11px] font-bold text-amber-200 mt-2 leading-tight">
+                {lang === 'en' ? 'Debt Freedom' : 'साहूकार मुक्ति'}
+              </span>
+              <span className="text-[9px] text-amber-300 font-semibold">{lang === 'en' ? 'In Progress' : 'चल रहा है'}</span>
+            </div>
+
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 rounded-2xl bg-white/[0.08] text-slate-300 font-bold flex items-center justify-center text-sm border border-white/15">
+                3
+              </div>
+              <span className="text-[11px] font-bold text-slate-300 mt-2 leading-tight">
+                {lang === 'en' ? 'Micro-Gold' : 'डिजिटल सोना'}
+              </span>
+              <span className="text-[9px] text-slate-500 font-semibold">{lang === 'en' ? 'Unlocked' : 'उपलब्ध'}</span>
+            </div>
+
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 rounded-2xl bg-white/[0.04] text-slate-500 font-bold flex items-center justify-center text-sm border border-white/10">
+                🏆
+              </div>
+              <span className="text-[11px] font-bold text-slate-400 mt-2 leading-tight">
+                {lang === 'en' ? 'SHG Leader' : 'दीदी उद्यम'}
+              </span>
+              <span className="text-[9px] text-slate-500 font-semibold">{lang === 'en' ? 'Master Badge' : 'फाइनल बैज'}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Bento-styled Lessons Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filteredLessons.map((lesson) => {

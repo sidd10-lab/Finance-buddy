@@ -6,6 +6,8 @@ import { AudioButton } from './AudioButton';
 import { speechService } from '../services/speechService';
 import { AIAdvisorService } from '../services/aiAdvisorService';
 import { UI_STRINGS } from '../services/translations';
+import { SavingsHealthGauge } from './graphics/SavingsHealthGauge';
+import { ExpenseDonutChart } from './graphics/ExpenseDonutChart';
 
 interface BudgetingModuleProps {
   profile: UserProfile;
@@ -185,6 +187,20 @@ export const BudgetingModule: React.FC<BudgetingModuleProps> = ({
           </h3>
           <p className="text-xs text-emerald-300/80 font-medium mt-1">{lang === 'en' ? 'Available surplus funds' : 'उपलब्ध अधिशेष राशि'}</p>
         </div>
+      </div>
+
+      {/* Visual Analytics Bento Row: Financial Health Dial + Expense Distribution Donut */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <SavingsHealthGauge
+          score={totalIncome > 0 ? Math.min(100, Math.round(((netSavings) / totalIncome) * 100) + 35) : 75}
+          lang={lang}
+          totalIncome={totalIncome}
+          totalExpense={totalExpense}
+        />
+        <ExpenseDonutChart
+          expenses={expenses}
+          lang={lang}
+        />
       </div>
 
       {/* Voice Entry Bar */}

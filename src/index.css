@@ -119,3 +119,98 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Futuristic FinTech Graphics & Animation Utilities */
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spinReverseSlow {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-8px) scale(1.02); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; filter: blur(30px); }
+  50% { opacity: 0.8; filter: blur(45px); }
+}
+
+@keyframes beamScan {
+  0% { transform: translateX(-100%) skewX(-20deg); }
+  100% { transform: translateX(200%) skewX(-20deg); }
+}
+
+.animate-spin-slow {
+  animation: spinSlow 20s linear infinite;
+}
+
+.animate-spin-reverse-slow {
+  animation: spinReverseSlow 25s linear infinite;
+}
+
+.animate-float-slow {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+/* Holographic Card Foil Effect */
+.holographic-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.holographic-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 40%,
+    rgba(245, 158, 11, 0.15) 45%,
+    rgba(16, 185, 129, 0.2) 50%,
+    rgba(56, 189, 248, 0.15) 55%,
+    rgba(255, 255, 255, 0.03) 60%,
+    transparent 100%
+  );
+  transform: rotate(25deg);
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.holographic-shine:hover::after {
+  animation: beamScan 2.5s ease-in-out infinite;
+}
+
+/* Glowing Border Gradient Wrapper */
+.gradient-border-wrapper {
+  position: relative;
+  border-radius: 1.5rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.02) 50%, rgba(16, 185, 129, 0.3) 100%);
+  padding: 1px;
+}
+
+.gradient-border-wrapper-gold {
+  position: relative;
+  border-radius: 1.5rem;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.5), rgba(255, 255, 255, 0.05) 50%, rgba(245, 158, 11, 0.2) 100%);
+  padding: 1px;
+}
+
+.gradient-border-inner {
+  border-radius: inherit;
+  background: #090e1a;
+  height: 100%;
+}

@@ -5,6 +5,7 @@ import { UserProfile, LanguageCode, LiteracyLevel } from '../types';
 import { AudioButton } from './AudioButton';
 import { speechService } from '../services/speechService';
 import { UI_STRINGS } from '../services/translations';
+import { GoldPriceChart } from './graphics/GoldPriceChart';
 
 interface MicroInvestmentModuleProps {
   profile: UserProfile;
@@ -139,9 +140,13 @@ export const MicroInvestmentModule: React.FC<MicroInvestmentModuleProps> = ({
 
       {/* TAB 1: Digital Gold */}
       {activeTab === 'gold' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Gold Vault Card */}
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1c160b]/90 via-[#261f10]/85 to-slate-950/95 p-6 border border-amber-500/35 shadow-[0_10px_35px_rgba(245,158,11,0.15)] flex flex-col justify-between backdrop-blur-xl">
+        <div className="space-y-6">
+          {/* Live MCX Gold Price Sparkline Area Chart */}
+          <GoldPriceChart currentPrice={goldPricePerGram} lang={lang} />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Gold Vault Card */}
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1c160b]/90 via-[#261f10]/85 to-slate-950/95 p-6 border border-amber-500/35 shadow-[0_10px_35px_rgba(245,158,11,0.15)] flex flex-col justify-between backdrop-blur-xl">
             <div>
               <div className="flex items-start justify-between">
                 <div>
@@ -247,6 +252,7 @@ export const MicroInvestmentModule: React.FC<MicroInvestmentModuleProps> = ({
             </button>
           </div>
         </div>
+      </div>
       )}
 
       {/* TAB 2: SHG Community Bachat Pool */}

@@ -4,6 +4,7 @@ import { UserProfile, LanguageCode } from '../types';
 import { AIAdvisorService } from '../services/aiAdvisorService';
 import { speechService } from '../services/speechService';
 import { AudioButton } from './AudioButton';
+import { SaheliOrb } from './graphics/SaheliOrb';
 
 interface Message {
   id: string;
@@ -119,9 +120,7 @@ export const SaheliVoiceChatModal: React.FC<SaheliVoiceChatModalProps> = ({
         {/* Modal Header */}
         <div className="bg-slate-900/90 p-4 text-white flex items-center justify-between border-b border-white/10 backdrop-blur-xl">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500/20 to-amber-500/20 border border-emerald-400/40 flex items-center justify-center text-xl shadow-inner">
-              🧕
-            </div>
+            <SaheliOrb isListening={isListening} size="sm" />
             <div>
               <h3 className="text-sm sm:text-base font-bold flex items-center gap-1.5">
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-emerald-200">सखी AI (Saheli AI Mitra)</span>

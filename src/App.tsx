@@ -12,6 +12,7 @@ import { SaheliVoiceChatModal } from './components/SaheliVoiceChatModal';
 import { Sparkles } from 'lucide-react';
 import { speechService } from './services/speechService';
 import { UI_STRINGS } from './services/translations';
+import { SaheliOrb } from './components/graphics/SaheliOrb';
 
 export const App: React.FC = () => {
   // Load persisted state or fallback to defaults
@@ -186,13 +187,11 @@ export const App: React.FC = () => {
           <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-emerald-500 via-amber-400 to-emerald-400 opacity-60 blur-md group-hover:opacity-100 transition duration-300 animate-pulse-slow"></div>
           <button
             onClick={() => setIsAiModalOpen(true)}
-            className="relative flex items-center gap-2.5 bg-slate-900/90 hover:bg-slate-800 text-white px-5 py-3 rounded-full shadow-2xl backdrop-blur-xl active:scale-95 transition-all duration-200 border border-emerald-400/30 hover:border-emerald-400/60"
+            className="relative flex items-center gap-3 bg-slate-900/90 hover:bg-slate-800 text-white pl-2 pr-5 py-2.5 rounded-full shadow-2xl backdrop-blur-xl active:scale-95 transition-all duration-200 border border-emerald-400/40 hover:border-emerald-400/70"
             title="सखी AI से बोलकर पूछें"
           >
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500/20 to-amber-500/20 border border-emerald-400/40 flex items-center justify-center text-base shadow-inner">
-              🧕
-            </div>
-            <span className="font-semibold text-xs sm:text-sm tracking-wide text-slate-100">
+            <SaheliOrb size="sm" />
+            <span className="font-bold text-xs sm:text-sm tracking-wide text-slate-100">
               {strings.askSaheli}
             </span>
             <span className="flex items-center">

@@ -4,6 +4,7 @@ import { GovernmentScheme, LanguageCode, LiteracyLevel, UserProfile } from '../t
 import { getLocalizedSchemes } from '../data/mockData';
 import { AudioButton } from './AudioButton';
 import { UI_STRINGS } from '../services/translations';
+import { RuPayCardGraphic } from './graphics/RuPayCardGraphic';
 
 interface BankingModuleProps {
   profile: UserProfile;
@@ -64,47 +65,50 @@ export const BankingModule: React.FC<BankingModuleProps> = ({
 
       {/* TAB 1: Visual Passbook */}
       {activeTab === 'passbook' && (
-        <div className="space-y-5">
-          {/* Bank Card / Account details - Luxury Holographic Debit Card */}
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0c182c]/95 via-[#0f213c]/90 to-[#071324]/95 p-6 sm:p-7 border border-emerald-500/30 shadow-[0_12px_40px_rgba(0,0,0,0.6)] backdrop-blur-xl">
-            <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 relative z-10">
+        <div className="space-y-6">
+          {/* Luxury 3D Holographic RuPay / PMJDY Card Graphic */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+            <div className="md:col-span-2">
+              <RuPayCardGraphic
+                cardHolderName={profile.name}
+                accountNumberMasked="6048 •••• •••• 3921"
+                balance={profile.walletBalance}
+                lang={lang}
+              />
+            </div>
+            
+            {/* Quick Card Status & Actions Pill */}
+            <div className="bg-slate-900/80 rounded-3xl p-5 border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col justify-between h-full backdrop-blur-xl">
               <div>
-                <div className="flex items-center gap-2 mb-2 flex-wrap">
-                  <span className="bg-white/10 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-white/10 text-slate-200">
-                    {lang === 'en' ? 'PM Jan Dhan Scheme Account' : 'प्रधानमंत्री जन-धन योजना खाता'}
-                  </span>
-                  <span className="bg-emerald-500/20 text-emerald-300 text-[11px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1 border border-emerald-400/30 shadow-sm">
-                    <CheckCircle className="w-3 h-3 text-emerald-400" /> {lang === 'en' ? 'Aadhaar DBT Active' : 'आधार DBT लिंक'}
-                  </span>
-                </div>
-                <h3 className="text-xl sm:text-2xl font-black tracking-tight text-white">
-                  {lang === 'en' ? 'Bank of Maharashtra (Rampur Branch)' : 'बैंक ऑफ महाराष्ट्र (शाखा: रामपुर)'}
-                </h3>
-                <div className="flex items-center gap-2 my-1">
-                  <div className="w-8 h-6 bg-gradient-to-r from-amber-400 to-amber-200 rounded-md border border-amber-500/40 opacity-90 shadow-sm" />
-                  <p className="text-xs text-slate-400 font-mono tracking-wider">
-                    {lang === 'en' ? 'A/C: ' : 'खाता: '} 6048 •••• •••• 3921
-                  </p>
-                </div>
-                <p className="text-xs text-slate-300 font-medium">
-                  {lang === 'en' ? 'Account Holder: ' : 'खाताधारक: '} <strong className="text-white">{profile.name}</strong>
-                </p>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/15 px-2.5 py-1 rounded-full border border-emerald-400/30">
+                  {lang === 'en' ? 'Direct Benefit Transfer' : 'डीबीटी / प्रत्यक्ष लाभ अंतरण'}
+                </span>
+                <h4 className="text-sm font-bold text-white mt-2">
+                  {lang === 'en' ? 'Jan Dhan Yojana Features' : 'जन धन खाता सुरक्षा व लाभ'}
+                </h4>
+                <ul className="text-xs text-slate-300 mt-2 space-y-2">
+                  <li className="flex items-center gap-1.5">
+                    <CheckCircle className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
+                    <span>₹2,00,000 {lang === 'en' ? 'RuPay Accidental Insurance' : 'मुफ्त दुर्घटना बीमा'}</span>
+                  </li>
+                  <li className="flex items-center gap-1.5">
+                    <CheckCircle className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
+                    <span>₹10,000 {lang === 'en' ? 'Overdraft facility eligibility' : 'ओवरड्राफ्ट सुविधा पात्रता'}</span>
+                  </li>
+                  <li className="flex items-center gap-1.5">
+                    <CheckCircle className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
+                    <span>{lang === 'en' ? 'Zero minimum balance required' : 'शून्य न्यूनतम बैलेंस खाता'}</span>
+                  </li>
+                </ul>
               </div>
 
-              <div className="bg-white/[0.06] backdrop-blur-md rounded-2xl p-5 sm:text-right border border-white/10 shadow-inner">
-                <span className="text-xs text-slate-400 font-medium">{s.currentBalance}</span>
-                <h2 className="text-3xl sm:text-4xl font-black mt-0.5 tracking-tight text-emerald-400 font-mono drop-shadow-[0_0_12px_rgba(16,185,129,0.35)]">
-                  ₹{profile.walletBalance.toLocaleString('en-IN')}
-                </h2>
-                <div className="mt-2.5">
-                  <AudioButton
-                    textToSpeak={`${s.currentBalance}: ₹${profile.walletBalance}`}
-                    lang={lang}
-                    size="sm"
-                    className="bg-white/10 text-white border-white/20"
-                  />
-                </div>
+              <div className="pt-3 border-t border-white/[0.08] mt-3 flex items-center justify-between">
+                <span className="text-[11px] text-slate-400">{lang === 'en' ? 'Need Help?' : 'सहायता चाहिए?'}</span>
+                <AudioButton
+                  textToSpeak={`${s.currentBalance}: ₹${profile.walletBalance}. ${lang === 'en' ? 'Jan Dhan account linked to Aadhaar DBT.' : 'जन धन खाता आधार से जुड़ा हुआ है।'}`}
+                  lang={lang}
+                  size="sm"
+                />
               </div>
             </div>
           </div>
