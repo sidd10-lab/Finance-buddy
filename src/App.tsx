@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { UserProfile, ExpenseItem, SavingsGoal, EducationLesson } from './types';
-import { initialUserProfile, initialExpenses, initialGoals, educationLessons } from './data/mockData';
+import React, { useState, useEffect, useMemo } from 'react';
+import { UserProfile, ExpenseItem, SavingsGoal } from './types';
+import { initialUserProfile, getLocalizedLessons, getLocalizedGoals, getLocalizedExpenses } from './data/mockData';
 import { Header } from './components/Header';
 import { Navigation, NavTab } from './components/Navigation';
 import { EducationModule } from './components/EducationModule';
@@ -11,6 +11,7 @@ import { MentorshipModule } from './components/MentorshipModule';
 import { SaheliVoiceChatModal } from './components/SaheliVoiceChatModal';
 import { Sparkles } from 'lucide-react';
 import { speechService } from './services/speechService';
+import { UI_STRINGS } from './services/translations';
 
 export const App: React.FC = () => {
   // Load persisted state or fallback to defaults
@@ -19,19 +20,9 @@ export const App: React.FC = () => {
     return saved ? JSON.parse(saved) : initialUserProfile;
   });
 
-  const [expenses, setExpenses] = useState<ExpenseItem[]>(() => {
-    const saved = localStorage.getItem('lakshmi_expenses');
-    return saved ? JSON.parse(saved) : initialExpenses;
-  });
-
-  const [goals, setGoals] = useState<SavingsGoal[]>(() => {
-    const saved = localStorage.getItem('lakshmi_goals');
-    return saved ? JSON.parse(saved) : initialGoals;
-  });
-
-  const [lessons, setLessons] = useState<EducationLesson[]>(() => {
-    const saved = localStorage.getItem('lakshmi_lessons');
-    return saved ? JSON.parse(saved) : educationLessons;
+  const [completedLessonIds, setCompletedLessonIds] = useState<string[]>(() => {
+    const saved = localStorage.getItem('lakshmi_completed_lessons');
+    return saved ? JSON.parse(saved) : ['lesson-1'];
   });
 
   const [activeTab, setActiveTab] = useState<NavTab>('education');
@@ -43,23 +34,56 @@ export const App: React.FC = () => {
   }, [profile]);
 
   useEffect(() => {
-    localStorage.setItem('lakshmi_expenses', JSON.stringify(expenses));
-  }, [expenses]);
+    localStorage.setItem('lakshmi_completed_lessons', JSON.stringify(completedLessonIds));
+  }, [completedLessonIds]);
+
+  // Dynamically compute localized content based on selected language
+  const lessons = useMemo(() => {
+    const localized = getLocalizedLessons(profile.language);
+    return localized.map(l => ({
+      ...l,
+      completed: completedLessonIds.includes(l.id)
+    }));
+  }, [profile.language, completedLessonIds]);
+
+  const [userCustomExpenses, setUserCustomExpenses] = useState<ExpenseItem[]>(() => {
+    const saved = localStorage.getItem('lakshmi_custom_expenses');
+    return saved ? JSON.parse(saved) : [];
+  });
 
   useEffect(() => {
-    localStorage.setItem('lakshmi_goals', JSON.stringify(goals));
-  }, [goals]);
+    localStorage.setItem('lakshmi_custom_expenses', JSON.stringify(userCustomExpenses));
+  }, [userCustomExpenses]);
+
+  const expenses = useMemo(() => {
+    const base = getLocalizedExpenses(profile.language);
+    return [...userCustomExpenses, ...base];
+  }, [profile.language, userCustomExpenses]);
+
+  const [customGoalAmounts, setCustomGoalAmounts] = useState<Record<string, number>>(() => {
+    const saved = localStorage.getItem('lakshmi_goal_amounts');
+    return saved ? JSON.parse(saved) : {};
+  });
 
   useEffect(() => {
-    localStorage.setItem('lakshmi_lessons', JSON.stringify(lessons));
-  }, [lessons]);
+    localStorage.setItem('lakshmi_goal_amounts', JSON.stringify(customGoalAmounts));
+  }, [customGoalAmounts]);
+
+  const goals = useMemo(() => {
+    const base = getLocalizedGoals(profile.language);
+    return base.map(g => ({
+      ...g,
+      currentAmount: customGoalAmounts[g.id] !== undefined ? customGoalAmounts[g.id] : g.currentAmount
+    }));
+  }, [profile.language, customGoalAmounts]);
 
   const handleUpdateProfile = (updated: Partial<UserProfile>) => {
+    speechService.stop();
     setProfile(prev => ({ ...prev, ...updated }));
   };
 
   const handleAddTransaction = (newTx: ExpenseItem) => {
-    setExpenses(prev => [newTx, ...prev]);
+    setUserCustomExpenses(prev => [newTx, ...prev]);
     if (newTx.type === 'income') {
       setProfile(prev => ({ ...prev, walletBalance: prev.walletBalance + newTx.amount }));
     } else {
@@ -68,9 +92,10 @@ export const App: React.FC = () => {
   };
 
   const handleUpdateGoal = (goalId: string, addAmount: number) => {
-    setGoals(prev =>
-      prev.map(g => (g.id === goalId ? { ...g, currentAmount: g.currentAmount + addAmount } : g))
-    );
+    setCustomGoalAmounts(prev => ({
+      ...prev,
+      [goalId]: (prev[goalId] !== undefined ? prev[goalId] : goals.find(g => g.id === goalId)?.currentAmount || 0) + addAmount
+    }));
     setProfile(prev => ({
       ...prev,
       walletBalance: Math.max(0, prev.walletBalance - addAmount)
@@ -78,13 +103,18 @@ export const App: React.FC = () => {
   };
 
   const handleCompleteLesson = (lessonId: string) => {
-    setLessons(prev =>
-      prev.map(l => (l.id === lessonId ? { ...l, completed: true } : l))
-    );
+    setCompletedLessonIds(prev => (prev.includes(lessonId) ? prev : [...prev, lessonId]));
   };
 
+  const strings = UI_STRINGS[profile.language] || UI_STRINGS.hi;
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#fbfaf7] text-slate-900">
+    <div className="min-h-screen flex flex-col bg-[#05070e] text-slate-100 bg-mesh-dark subtle-grid-pattern relative selection:bg-emerald-500/20 selection:text-emerald-300">
+      {/* Decorative ambient blurred glow orbs */}
+      <div className="fixed top-[-100px] left-1/4 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="fixed top-[40%] right-[-100px] w-[500px] h-[500px] bg-amber-500/8 rounded-full blur-[160px] pointer-events-none -z-10" />
+      <div className="fixed bottom-[-100px] left-[-100px] w-[500px] h-[500px] bg-indigo-500/8 rounded-full blur-[150px] pointer-events-none -z-10" />
+
       {/* Sticky App Header */}
       <Header
         profile={profile}
@@ -103,7 +133,7 @@ export const App: React.FC = () => {
       />
 
       {/* Content Container */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 pb-24">
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 pb-28 relative z-10">
         {activeTab === 'education' && (
           <EducationModule
             lessons={lessons}
@@ -152,21 +182,24 @@ export const App: React.FC = () => {
 
       {/* Floating Action Button for Voice AI Assistant */}
       <aside aria-label="AI Voice Assistant Launcher" className="fixed bottom-6 right-6 z-40">
-        <button
-          onClick={() => setIsAiModalOpen(true)}
-          className="group relative flex items-center gap-2.5 bg-slate-900 hover:bg-slate-800 text-white px-4 py-3 rounded-full shadow-elevated active:scale-95 transition-all duration-200 border border-slate-700/80"
-          title="सखी AI से बोलकर पूछें"
-        >
-          <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-sm">
-            🧕
-          </div>
-          <span className="font-semibold text-xs sm:text-sm tracking-wide">
-            सखी AI बोलें
-          </span>
-          <span className="flex items-center">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-          </span>
-        </button>
+        <div className="relative group">
+          <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-emerald-500 via-amber-400 to-emerald-400 opacity-60 blur-md group-hover:opacity-100 transition duration-300 animate-pulse-slow"></div>
+          <button
+            onClick={() => setIsAiModalOpen(true)}
+            className="relative flex items-center gap-2.5 bg-slate-900/90 hover:bg-slate-800 text-white px-5 py-3 rounded-full shadow-2xl backdrop-blur-xl active:scale-95 transition-all duration-200 border border-emerald-400/30 hover:border-emerald-400/60"
+            title="सखी AI से बोलकर पूछें"
+          >
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500/20 to-amber-500/20 border border-emerald-400/40 flex items-center justify-center text-base shadow-inner">
+              🧕
+            </div>
+            <span className="font-semibold text-xs sm:text-sm tracking-wide text-slate-100">
+              {strings.askSaheli}
+            </span>
+            <span className="flex items-center">
+              <Sparkles className="w-4 h-4 text-emerald-400 animate-pulse" />
+            </span>
+          </button>
+        </div>
       </aside>
 
       {/* Saheli Voice Chat Modal */}
@@ -178,15 +211,18 @@ export const App: React.FC = () => {
       />
 
       {/* Footer */}
-      <footer className="bg-white border-t border-slate-200/80 py-6 text-center text-xs text-slate-400">
+      <footer className="bg-slate-950/80 backdrop-blur-md border-t border-white/[0.07] py-6 text-center text-xs text-slate-400 relative z-10">
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-1.5 text-slate-700 font-semibold">
-            <span>लक्ष्मी सखी (Lakshmi Sakhi)</span>
-            <span>•</span>
-            <span className="text-slate-500 font-normal">आत्मनिर्भर ग्रामीण नारी वित्तीय सशक्तिकरण</span>
+          <div className="flex items-center gap-2 text-slate-300 font-medium">
+            <span className="text-white font-semibold flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              {strings.appTitle}
+            </span>
+            <span className="text-slate-600">•</span>
+            <span className="text-slate-400">{strings.tagline}</span>
           </div>
-          <div className="text-slate-400">
-            ग्रामीण विकास मंत्रालय (NRLM) एवं स्वयं सहायता समूह (SHG) हेतु समर्पित
+          <div className="text-slate-500">
+            {strings.appSubtitle}
           </div>
         </div>
       </footer>

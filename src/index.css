@@ -5,18 +5,82 @@
 @layer base {
   body {
     font-family: 'Plus Jakarta Sans', 'Hind', system-ui, -apple-system, sans-serif;
-    color: #0f172a;
-    background-color: #fbfaf7;
+    color: #f1f5f9;
+    background-color: #05070e;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
   }
 }
 
-/* Custom sound wave animation */
+/* Luxury Glassmorphic Panels */
+.glass-panel {
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.7) 0%, rgba(15, 23, 42, 0.55) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+.glass-panel-elevated {
+  background: linear-gradient(135deg, rgba(22, 33, 54, 0.75) 0%, rgba(15, 23, 42, 0.7) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.6), 0 0 20px -5px rgba(16, 185, 129, 0.1);
+}
+
+.glass-panel-interactive {
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.6) 0%, rgba(15, 23, 42, 0.45) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel-interactive:hover {
+  transform: translateY(-3px);
+  border-color: rgba(16, 185, 129, 0.35);
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.7), 0 0 25px -5px rgba(16, 185, 129, 0.18);
+}
+
+.gold-luxury-card {
+  background: linear-gradient(135deg, rgba(30, 24, 13, 0.85) 0%, rgba(42, 33, 16, 0.75) 50%, rgba(20, 16, 8, 0.9) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  box-shadow: 0 10px 35px -5px rgba(245, 158, 11, 0.15), 0 0 1px 1px rgba(245, 158, 11, 0.2);
+}
+
+.emerald-luxury-card {
+  background: linear-gradient(135deg, rgba(6, 40, 30, 0.85) 0%, rgba(4, 30, 24, 0.8) 50%, rgba(2, 18, 14, 0.9) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  box-shadow: 0 10px 35px -5px rgba(16, 185, 129, 0.15), 0 0 1px 1px rgba(16, 185, 129, 0.2);
+}
+
+/* Ambient Radial Mesh Gradients */
+.bg-mesh-dark {
+  background-image: 
+    radial-gradient(at 15% 15%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+    radial-gradient(at 85% 20%, rgba(245, 158, 11, 0.06) 0px, transparent 50%),
+    radial-gradient(at 50% 75%, rgba(99, 102, 241, 0.05) 0px, transparent 55%),
+    radial-gradient(at 80% 90%, rgba(16, 185, 129, 0.06) 0px, transparent 40%);
+}
+
+.subtle-grid-pattern {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+
+/* Sound wave animation */
 @keyframes soundwave {
   0%, 100% { height: 4px; }
-  50% { height: 16px; }
+  50% { height: 18px; }
 }
 
 .animate-wave-1 {
@@ -32,38 +96,20 @@
   animation: soundwave 0.8s ease-in-out infinite 0.45s;
 }
 
-/* Clean glass cards */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
-}
-
-.gold-luxury-card {
-  background: linear-gradient(135deg, #fdfbf7 0%, #f7f1e3 60%, #eedfc0 100%);
-  border: 1px solid rgba(213, 187, 138, 0.5);
-}
-
-.emerald-luxury-card {
-  background: linear-gradient(135deg, #064e3b 0%, #065f46 60%, #047857 100%);
-  border: 1px solid rgba(134, 239, 172, 0.3);
-}
-
-/* Minimalist scrollbars */
+/* Minimalist dark scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(15, 23, 42, 0.6);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.35);
+  background: rgba(255, 255, 255, 0.18);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.6);
+  background: rgba(255, 255, 255, 0.32);
 }
 
 .no-scrollbar::-webkit-scrollbar {

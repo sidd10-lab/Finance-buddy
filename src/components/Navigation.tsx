@@ -49,35 +49,38 @@ export const Navigation: React.FC<NavigationProps> = ({
   ];
 
   return (
-    <nav className="bg-white/80 backdrop-blur-md border-b border-slate-200/80 sticky top-[71px] z-20">
+    <nav className="bg-[#070a13]/70 backdrop-blur-xl border-b border-white/[0.06] sticky top-[71px] z-20 shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="flex items-center justify-around sm:justify-start gap-1 sm:gap-2 overflow-x-auto py-2 no-scrollbar">
+        <div className="flex items-center justify-around sm:justify-start gap-1 sm:gap-2.5 overflow-x-auto py-2.5 no-scrollbar">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
                 onClick={() => onTabChange(tab.id)}
-                className={`relative flex items-center gap-2 px-3.5 py-2 rounded-xl font-semibold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 ${
+                className={`relative flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-xs sm:text-sm whitespace-nowrap transition-all duration-300 ${
                   isActive
-                    ? 'bg-slate-900 text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
+                    ? 'bg-gradient-to-r from-emerald-500/20 via-emerald-500/10 to-teal-500/20 text-emerald-300 border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.2)]'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] border border-transparent'
                 }`}
               >
-                <span className={isActive ? 'text-white' : 'text-slate-400'}>
+                <span className={isActive ? 'text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'text-slate-500'}>
                   {tab.icon}
                 </span>
-                <span>{tab.label}</span>
+                <span className={isActive ? 'font-bold' : ''}>{tab.label}</span>
                 {tab.badge && (
                   <span
-                    className={`text-[10px] px-1.5 py-0.2 rounded-md font-bold ml-0.5 ${
+                    className={`text-[10px] px-2 py-0.5 rounded-full font-bold ml-0.5 tracking-wide ${
                       isActive
-                        ? 'bg-white/20 text-white'
-                        : 'bg-amber-100 text-amber-800'
+                        ? 'bg-emerald-500/30 text-emerald-200 border border-emerald-400/30'
+                        : 'bg-amber-400/15 text-amber-300 border border-amber-400/25'
                     }`}
                   >
                     {tab.badge}
                   </span>
+                )}
+                {isActive && (
+                  <span className="absolute -bottom-[11px] left-1/2 -translate-x-1/2 w-8 h-[2px] bg-gradient-to-r from-transparent via-emerald-400 to-transparent rounded-full" />
                 )}
               </button>
             );

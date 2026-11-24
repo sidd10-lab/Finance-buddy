@@ -114,18 +114,18 @@ export const SaheliVoiceChatModal: React.FC<SaheliVoiceChatModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5">
-      <div className="bg-white rounded-3xl max-w-lg w-full h-[85vh] flex flex-col shadow-elevated border border-slate-200 overflow-hidden animate-in zoom-in-95">
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
+      <div className="bg-gradient-to-b from-[#0c1424] to-[#070b14] rounded-3xl max-w-lg w-full h-[85vh] flex flex-col shadow-2xl border border-white/15 overflow-hidden animate-in zoom-in-95 text-slate-100">
         {/* Modal Header */}
-        <div className="bg-slate-900 p-4 text-white flex items-center justify-between border-b border-slate-800">
+        <div className="bg-slate-900/90 p-4 text-white flex items-center justify-between border-b border-white/10 backdrop-blur-xl">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-xl">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500/20 to-amber-500/20 border border-emerald-400/40 flex items-center justify-center text-xl shadow-inner">
               🧕
             </div>
             <div>
               <h3 className="text-sm sm:text-base font-bold flex items-center gap-1.5">
-                <span>सखी AI (Saheli AI Mitra)</span>
-                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-emerald-200">सखी AI (Saheli AI Mitra)</span>
+                <Sparkles className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
               </h3>
               <p className="text-[11px] text-slate-400 font-medium">
                 आपकी व्यक्तिगत वित्तीय मार्गदर्शिका
@@ -137,19 +137,19 @@ export const SaheliVoiceChatModal: React.FC<SaheliVoiceChatModalProps> = ({
               speechService.stop();
               onClose();
             }}
-            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-slate-300 font-bold transition-all"
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-slate-300 hover:text-white font-bold transition-all border border-white/10"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Quick Suggestion Chips */}
-        <div className="bg-slate-50 p-2.5 border-b border-slate-200/80 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+        <div className="bg-white/[0.03] p-2.5 border-b border-white/[0.08] flex items-center gap-2 overflow-x-auto no-scrollbar">
           {quickQuestions.map((q, idx) => (
             <button
               key={idx}
               onClick={() => handleSendMessage(q.query)}
-              className="bg-white hover:bg-slate-100 text-slate-700 border border-slate-200/90 px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap shadow-2xs active:scale-95 transition-all"
+              className="bg-white/[0.05] hover:bg-white/[0.1] text-slate-200 border border-white/10 hover:border-emerald-400/40 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap active:scale-95 transition-all"
             >
               💬 {q.label}
             </button>
@@ -157,7 +157,7 @@ export const SaheliVoiceChatModal: React.FC<SaheliVoiceChatModalProps> = ({
         </div>
 
         {/* Message Thread */}
-        <div className="flex-1 p-4 overflow-y-auto space-y-3.5 bg-slate-50/50">
+        <div className="flex-1 p-4 overflow-y-auto space-y-3.5 bg-[#070b14]/60">
           {messages.map((msg) => (
             <div
               key={msg.id}
@@ -166,7 +166,7 @@ export const SaheliVoiceChatModal: React.FC<SaheliVoiceChatModalProps> = ({
               }`}
             >
               {msg.sender === 'saheli' && (
-                <div className="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center text-xs flex-shrink-0 mt-1 shadow-2xs">
+                <div className="w-7 h-7 rounded-xl bg-slate-800 border border-white/10 text-white flex items-center justify-center text-xs flex-shrink-0 mt-1 shadow-inner">
                   🧕
                 </div>
               )}
@@ -174,15 +174,15 @@ export const SaheliVoiceChatModal: React.FC<SaheliVoiceChatModalProps> = ({
               <div
                 className={`max-w-[85%] rounded-2xl p-3.5 text-xs sm:text-sm leading-relaxed ${
                   msg.sender === 'user'
-                    ? 'bg-slate-900 text-white rounded-br-xs shadow-xs'
-                    : 'bg-white text-slate-800 border border-slate-200/90 rounded-bl-xs shadow-soft'
+                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-br-xs shadow-md font-medium'
+                    : 'bg-white/[0.06] text-slate-100 border border-white/10 rounded-bl-xs shadow-[0_4px_20px_rgba(0,0,0,0.3)]'
                 }`}
               >
                 <p>{msg.text}</p>
 
                 {msg.actionableStep && (
-                  <div className="mt-2.5 pt-2 border-t border-slate-100 text-slate-900 font-semibold bg-slate-50 p-2 rounded-xl text-[11px] flex items-center gap-1">
-                    <span>👉 कदम:</span>
+                  <div className="mt-2.5 pt-2 border-t border-white/10 text-emerald-300 font-bold bg-emerald-500/10 p-2.5 rounded-xl text-[11px] flex items-center gap-1.5 border border-emerald-400/20">
+                    <span className="text-amber-300">👉 कदम:</span>
                     <span>{msg.actionableStep}</span>
                   </div>
                 )}
@@ -201,7 +201,7 @@ export const SaheliVoiceChatModal: React.FC<SaheliVoiceChatModalProps> = ({
               </div>
 
               {msg.sender === 'user' && (
-                <div className="w-7 h-7 rounded-lg bg-slate-200 flex items-center justify-center text-xs flex-shrink-0 mt-1">
+                <div className="w-7 h-7 rounded-xl bg-slate-700/60 border border-white/10 flex items-center justify-center text-xs flex-shrink-0 mt-1">
                   👩‍🌾
                 </div>
               )}
@@ -211,14 +211,14 @@ export const SaheliVoiceChatModal: React.FC<SaheliVoiceChatModalProps> = ({
         </div>
 
         {/* Input Bar */}
-        <div className="p-3 bg-white border-t border-slate-200 flex items-center gap-2">
+        <div className="p-3 bg-slate-900/90 border-t border-white/10 flex items-center gap-2">
           {/* Voice Input Button */}
           <button
             onClick={toggleMic}
             className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all flex-shrink-0 ${
               isListening
-                ? 'bg-rose-600 text-white ring-4 ring-rose-100 animate-pulse'
-                : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                ? 'bg-rose-600 text-white ring-4 ring-rose-500/30 animate-pulse shadow-[0_0_15px_rgba(244,63,94,0.5)]'
+                : 'bg-white/[0.08] hover:bg-white/[0.15] text-emerald-400 border border-white/10'
             }`}
             title="बोलकर पूछें"
           >
@@ -231,14 +231,14 @@ export const SaheliVoiceChatModal: React.FC<SaheliVoiceChatModalProps> = ({
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
             placeholder={isListening ? 'बोलिए, सखी सुन रही है...' : 'सवाल लिखें या माइक दबाएं...'}
-            className="flex-1 px-3.5 py-2 border border-slate-200 focus:border-slate-400 rounded-xl text-xs sm:text-sm focus:outline-none"
+            className="flex-1 px-3.5 py-2.5 bg-white/[0.05] border border-white/10 focus:border-emerald-400 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none"
           />
 
           <button
             onClick={() => handleSendMessage()}
-            className="w-10 h-10 rounded-xl bg-slate-900 hover:bg-slate-800 text-white flex items-center justify-center flex-shrink-0 shadow-2xs active:scale-95 transition-all"
+            className="w-10 h-10 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold flex items-center justify-center flex-shrink-0 shadow-md active:scale-95 transition-all"
           >
-            <Send className="w-3.5 h-3.5" />
+            <Send className="w-4 h-4 text-slate-950" />
           </button>
         </div>
       </div>

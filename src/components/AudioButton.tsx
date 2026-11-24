@@ -45,8 +45,8 @@ export const AudioButton: React.FC<AudioButtonProps> = ({
       onClick={toggleSpeak}
       className={`inline-flex items-center justify-center rounded-full font-medium transition-all duration-200 active:scale-95 ${
         isPlaying
-          ? 'bg-slate-900 text-white shadow-sm ring-2 ring-slate-900/20'
-          : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/90 shadow-2xs hover:border-slate-300'
+          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 shadow-[0_0_15px_rgba(16,185,129,0.3)] ring-1 ring-emerald-400/30'
+          : 'bg-white/[0.08] hover:bg-white/[0.14] text-slate-200 border border-white/10 shadow-sm hover:border-white/20'
       } ${sizeClasses[size]} ${className}`}
       title={isPlaying ? "आवाज़ रोकें (Stop audio)" : "बोलकर सुनाएं (Read aloud)"}
       aria-label={label}
@@ -54,17 +54,17 @@ export const AudioButton: React.FC<AudioButtonProps> = ({
       {isPlaying ? (
         <>
           <div className="flex items-center gap-0.5 h-3">
-            <span className="w-0.5 bg-white rounded-full animate-wave-1"></span>
-            <span className="w-0.5 bg-white rounded-full animate-wave-2"></span>
-            <span className="w-0.5 bg-white rounded-full animate-wave-3"></span>
-            <span className="w-0.5 bg-white rounded-full animate-wave-4"></span>
+            <span className="w-0.5 bg-emerald-400 rounded-full animate-wave-1"></span>
+            <span className="w-0.5 bg-emerald-400 rounded-full animate-wave-2"></span>
+            <span className="w-0.5 bg-emerald-400 rounded-full animate-wave-3"></span>
+            <span className="w-0.5 bg-emerald-400 rounded-full animate-wave-4"></span>
           </div>
-          <VolumeX className="w-3.5 h-3.5 ml-0.5 text-slate-300" />
-          <span>रोकें</span>
+          <VolumeX className="w-3.5 h-3.5 ml-0.5 text-emerald-300" />
+          <span className="font-semibold text-emerald-300">रोकें</span>
         </>
       ) : (
         <>
-          <Volume2 className="w-3.5 h-3.5 text-slate-500" />
+          <Volume2 className="w-3.5 h-3.5 text-emerald-400" />
           <span>{label}</span>
         </>
       )}
